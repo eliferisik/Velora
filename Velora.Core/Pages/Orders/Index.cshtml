@@ -1,0 +1,5 @@
+@page
+@model Velora.Core.Pages.Orders.IndexModel
+@{ ViewData["Title"]="Siparişlerim"; }
+@section Styles { <link rel="stylesheet" href="~/css/hesabim.css" /> }
+<section class="account-page"><div class="account-header"><span>VELORA ACCOUNT</span><h1>Sipariş Geçmişim</h1><p>Geçmiş siparişlerinizi ve sipariş içeriklerini görüntüleyin.</p></div>@if(Model.PlacedId.HasValue){<p class="success-message">Siparişiniz alındı. Sipariş numaranız: @Model.PlacedId</p>}@foreach(var order in Model.Orders){<article class="order-card"><h2>Sipariş #@order.Id</h2><p>@order.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm") · @order.Status</p><ul>@foreach(var line in order.Details){<li>@line.Product?.Name · @line.Size · @line.Quantity adet · @((line.UnitPrice*line.Quantity).ToString("C2",Model.Culture))</li>}</ul><strong>Toplam: @order.Total.ToString("C2",Model.Culture)</strong></article>}@if(!Model.Orders.Any()){<p>Henüz siparişiniz yok.</p>}</section>

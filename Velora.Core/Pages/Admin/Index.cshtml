@@ -1,0 +1,46 @@
+@page
+@model Velora.Core.Pages.Admin.IndexModel
+@{ ViewData["Title"] = "Yönetim Paneli"; }
+@section Styles { <link rel="stylesheet" href="~/css/hesabim.css" /> }
+<section class="admin-page">
+    <div class="page-header"><span>VELORA ADMIN</span><h1>Yönetim Paneli</h1><p>Ürün, kategori ve siparişleri yönetin.</p></div>
+    <div asp-validation-summary="All" class="error"></div>
+    @if (TempData["Error"] is string error) { <p class="error">@error</p> }
+
+    <h2>Kategori Ekle</h2>
+    <form method="post" asp-page-handler="AddCategory" class="admin-form"><input name="CategoryName" placeholder="Kategori adı" required maxlength="80"/><button type="submit">Kategori Ekle</button></form>
+    <div class="admin-categories">
+        @foreach (var c in Model.Categories) {
+            <form method="post" asp-page-handler="UpdateCategory"><input type="hidden" name="id" value="@c.Id"/><input name="name" value="@c.Name" maxlength="80" required/><button type="submit">Kaydet</button></form>
+            <form method="post" asp-page-handler="DeleteCategory"><input type="hidden" name="id" value="@c.Id"/><button type="submit">Sil</button></form>
+        }
+    </div>
+
+    <h2>Ürün Ekle</h2>
+    <form method="post" asp-page-handler="AddProduct" class="admin-form">
+        <input name="Name" placeholder="Ürün adı" required maxlength="140"/><input name="Price" type="number" step="0.01" min="0.01" placeholder="Fiyat" required/><input name="Stock" type="number" min="0" placeholder="Stok" required/>
+        <select name="CategoryId" required><option value="">Kategori</option>@foreach(var c in Model.Categories){<option value="@c.Id">@c.Name</option>}</select>
+        <input name="Image" placeholder="images/ürün.jpg" required/><input name="HoverImage" placeholder="images/ürün-2.jpg"/><textarea name="Description" required maxlength="2000" placeholder="Açıklama"></textarea><button type="submit">Ürünü Ekle</button>
+    </form>
+
+    <h2>Ürünler</h2>
+    <div class="admin-list">
+        @foreach (var p in Model.Products) {
+            <form method="post" asp-page-handler="UpdateProduct" class="admin-row">
+                <input type="hidden" name="Id" value="@p.Id"/><input name="Name" value="@p.Name" required maxlength="140"/>
+                <input name="Price" type="number" step="0.01" min="0.01" value="@p.Price"/><input name="Stock" type="number" min="0" value="@p.Stock"/>
+                <select name="CategoryId">@foreach(var c in Model.Categories){<option value="@c.Id" selected="@(c.Id==p.CategoryId)">@c.Name</option>}</select>
+                <input name="Image" value="@p.Image" required maxlength="260"/><input name="HoverImage" value="@p.HoverImage" maxlength="260"/><textarea name="Description" required maxlength="2000">@p.Description</textarea>
+                <label><input name="IsActive" type="checkbox" value="true" checked="@p.IsActive"/> Aktif</label><button type="submit">Kaydet</button><button type="submit" formaction="?handler=DeleteProduct" name="id" value="@p.Id">Sil</button>
+            </form>
+        }
+    </div>
+
+    <h2>Siparişler</h2>
+    @foreach (var o in Model.Orders) {
+        <article class="order-card"><strong>#@o.Id · @o.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm") · @o.Total.ToString("C2",Model.Culture)</strong>
+            <form method="post" asp-page-handler="UpdateOrder"><input type="hidden" name="id" value="@o.Id"/><select name="status"><option selected="@(o.Status=="Alındı")">Alındı</option><option selected="@(o.Status=="Hazırlanıyor")">Hazırlanıyor</option><option selected="@(o.Status=="Kargoya Verildi")">Kargoya Verildi</option><option selected="@(o.Status=="Tamamlandı")">Tamamlandı</option><option selected="@(o.Status=="İptal")">İptal</option></select><button>Durumu Kaydet</button></form>
+            <ul>@foreach(var line in o.Details){<li>@line.Product?.Name · @line.Size · @line.Quantity adet</li>}</ul>
+        </article>
+    }
+</section>

@@ -1,0 +1,5 @@
+@page
+@model Velora.Core.Pages.Account.LoginModel
+@{ ViewData["Title"]="Giriş Yap"; }
+@section Styles { <link rel="stylesheet" href="~/css/login.css" /> }
+<section class="box"><h1>Giriş Yap</h1><form method="post"><input type="hidden" asp-for="ReturnUrl"/><div asp-validation-summary="ModelOnly" class="error"></div><input asp-for="Input.Email" placeholder="E-posta"/><span asp-validation-for="Input.Email" class="error"></span><input asp-for="Input.Password" placeholder="Şifre"/><span asp-validation-for="Input.Password" class="error"></span><label><input asp-for="Input.RememberMe"/> Beni hatırla</label><button class="submit">Giriş Yap</button></form><p><a href="/Account/Register">Hesap oluştur</a></p></section>

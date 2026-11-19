@@ -1,0 +1,11 @@
+.vs/
+**/bin/
+**/obj/
+**/*.user
+**/appsettings.Local.json
+**/secrets.json
+
+Velora.Core/App_Data/*.db
+Velora.Core/App_Data/*.db-*
+Velora.Core/App_Data/Keys/
+

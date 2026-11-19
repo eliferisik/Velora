@@ -1,0 +1,125 @@
+﻿
+<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="velora.master.cs" Inherits="velorasite.velora" %>
+
+<!DOCTYPE html>
+
+<html>
+
+<head runat="server">
+
+    <title>VELORA</title>
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link href="Content/velorastyle.css" rel="stylesheet" />
+
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+
+</head>
+
+<body>
+
+    <form id="form1" runat="server">
+
+        <header class="site-header">
+
+            <nav class="navbar">
+
+                <div class="logo">
+                    VELORA
+                </div>
+
+                <ul class="menu">
+
+                    <li><a href="Default.aspx">Ana Sayfa</a></li>
+                    <li><a href="Favoriler.aspx">Favorilerim</a></li>
+                    <li><a href="sepet.aspx">Sepet</a></li>
+                    <li><a href="login.aspx">Giriş Yap</a></li>
+                    <li><a href="hesabim.aspx">Hesabım</a></li>
+                    <li><a href="iletisim.aspx">İletişim</a></li>
+                    <li><a href="hakkimizda.aspx">Hakkımızda</a></li>
+
+                </ul>
+
+            </nav>
+
+        </header>
+
+        <main>
+
+            <asp:ContentPlaceHolder ID="MainContent" runat="server">
+            </asp:ContentPlaceHolder>
+
+        </main>
+
+<footer class="site-footer">
+
+    <div class="footer-container">
+
+        <!-- SOL -->
+        <div class="footer-brand">
+
+            <h2>VELORA</h2>
+
+            <p>
+                Modern, minimal ve premium moda deneyimi.
+            </p>
+
+        </div>
+
+
+        <!-- ORTA -->
+        <div class="footer-features">
+
+            <div class="feature-box">
+                <span>🚚</span>
+                <p>Hızlı Teslimat</p>
+            </div>
+
+            <div class="feature-box">
+                <span>🔒</span>
+                <p>Güvenli Ödeme</p>
+            </div>
+
+            <div class="feature-box">
+                <span>💎</span>
+                <p>Premium Kalite</p>
+            </div>
+
+            <div class="feature-box">
+                <span>🤍</span>
+                <p>7/24 Destek</p>
+            </div>
+
+        </div>
+
+
+        <!-- SAĞ -->
+        <div class="footer-social">
+
+            <a href="#">Instagram</a>
+            <a href="#">Twitter</a>
+            <a href="#">Pinterest</a>
+
+        </div>
+
+    </div>
+
+
+    <div class="footer-bottom">
+
+        <p>
+            © 2026 VELORA — Tüm hakları saklıdır.
+        </p>
+
+    </div>
+
+</footer>
+
+    </form>
+
+</body>
+
+</html>

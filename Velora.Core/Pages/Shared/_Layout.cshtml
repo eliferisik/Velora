@@ -1,0 +1,44 @@
+@using Microsoft.AspNetCore.Identity
+@using Velora.Core.Models
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] - VELORA</title>
+    <link rel="stylesheet" href="~/css/velorastyle.css" />
+    <link rel="stylesheet" href="~/css/velora-app.css" />
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+    <header class="site-header">
+        <nav class="navbar">
+            <a class="logo" href="/">VELORA</a>
+            <ul class="menu">
+                <li><a href="/">Ana Sayfa</a></li><li><a href="/Products">Ürünler</a></li><li><a href="/Favorites">Favorilerim</a></li><li><a href="/Cart">Sepet</a></li>
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <li><a href="/Orders">Siparişlerim</a></li>
+                    @if (User.IsInRole("Admin")) { <li><a href="/Admin">Yönetim</a></li> }
+                    <li><form method="post" action="/Account/Logout">@Html.AntiForgeryToken()<button class="nav-link-button">Çıkış (@User.Identity.Name)</button></form></li>
+                }
+                else { <li><a href="/Account/Login">Giriş Yap</a></li><li><a href="/Account/Register">Kayıt Ol</a></li> }
+                <li><a href="/Contact">İletişim</a></li><li><a href="/About">Hakkımızda</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>@RenderBody()</main>
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-brand"><h2>VELORA</h2><p>Modern, minimal ve premium moda deneyimi.</p></div>
+            <div class="footer-features"><div class="feature-box"><span>🚚</span><p>Hızlı Teslimat</p></div><div class="feature-box"><span>🔒</span><p>Güvenli Ödeme</p></div><div class="feature-box"><span>💎</span><p>Premium Kalite</p></div><div class="feature-box"><span>🤍</span><p>7/24 Destek</p></div></div>
+            <div class="footer-social"><a href="#">Instagram</a><a href="#">Twitter</a><a href="#">Pinterest</a></div>
+        </div>
+        <div class="footer-bottom"><p>© 2026 VELORA — Tüm hakları saklıdır.</p></div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script><script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script><script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,38 @@
+@page
+@model IndexModel
+@{ ViewData["Title"] = "Velora | Zamansız Stil"; }
+@{ var dressId = Model.Categories.FirstOrDefault(c => c.Name == "Elbise")?.Id; var setId = Model.Categories.FirstOrDefault(c => c.Name == "Takım")?.Id; }
+<section class="top-categories">
+    <a class="top-category" href="/Products?category=@dressId"><img src="/images/elbise.png" alt=""/><span>Elbise</span></a>
+    <a class="top-category" href="/Products?category=@setId"><img src="/images/takim.png" alt=""/><span>Takım</span></a>
+    <a class="top-category" href="/Products"><img src="/images/yuvarlakminimal.png" alt=""/><span>Minimal</span></a>
+    <a class="top-category" href="/Products"><img src="/images/soft.png" alt=""/><span>Soft Girl</span></a>
+    <a class="top-category" href="/Products"><img src="/images/blazer.png" alt=""/><span>Blazer</span></a>
+    <a class="top-category" href="/Products"><img src="/images/yuvarlakevening.png" alt=""/><span>Evening</span></a>
+</section>
+<section class="promo-banners">
+    <a class="promo-card large-banner" href="/Products"><img src="/images/summerescape.png" alt="Velora yaz koleksiyonu"/></a>
+    <a class="promo-card" href="/Products"><img src="/images/minimal.png" alt="Minimal koleksiyon"/></a>
+    <a class="promo-card" href="/Products"><img src="/images/evening.png" alt="Akşam koleksiyonu"/></a>
+</section>
+<section class="shop-area">
+    <aside class="sidebar"><h2>Kategoriler</h2><ul>
+        @foreach (var category in Model.Categories) { <li><a href="/Products?category=@category.Id">@category.Name</a></li> }
+    </ul></aside>
+    <div class="collection-section">
+        <div class="collection-header"><h2>Sana Özel Ürünler</h2><span>Tüm ürünler →</span></div>
+        <div class="trend-categories"><div class="trend-box">Minimal</div><div class="trend-box">Soft Girl</div><div class="trend-box">Summer Mood</div><div class="trend-box">Black Edition</div><div class="trend-box">Old Money</div></div>
+        <div class="slider-wrapper"><button type="button" class="slider-btn left-btn" aria-label="Önceki">&#10094;</button>
+            <section class="products" id="productSlider">
+                @foreach (var p in Model.Products) {
+                    <article class="product-card product-card-clickable" data-product-card data-detail-url="/Products/Details/@p.Id" tabindex="0" role="link" aria-label="@p.Name ürün detayını aç"><div class="product-image"><button type="button" class="favorite-btn" data-favorite data-id="@p.Id" data-name="@p.Name" data-price="@p.Price.ToString(System.Globalization.CultureInfo.InvariantCulture)" data-image="/@p.Image" data-hover="/@(p.HoverImage ?? p.Image)" aria-label="Favorilere ekle">♡</button><img src="/@p.Image" class="main-img" alt="@p.Name"/><img src="/@(p.HoverImage ?? p.Image)" class="hover-img" alt=""/></div><div class="product-info"><div class="product-category">@p.Category?.Name</div><h3>@p.Name</h3><p>@p.Price.ToString("C0", new System.Globalization.CultureInfo("tr-TR"))</p></div></article>
+                }
+            </section><button type="button" class="slider-btn right-btn" aria-label="Sonraki">&#10095;</button>
+        </div>
+    </div>
+</section>
+<div class="big-banners"><a class="banner-box" href="/Products"><div class="banner-content"><h2>Yeni Gelenler</h2><span>→</span></div></a><a class="banner-box" href="/Products?sort=top"><div class="banner-content"><h2>Çok Satanlar</h2><span>→</span></div></a></div>
+<section class="collections-section"><div class="section-title"><h2>VELORA COLLECTIONS</h2></div><div class="collections-grid"><a class="collection-card" href="/Products"><img src="/images/softsummer.png" alt="Soft Summer"/></a><a class="collection-card" href="/Products"><img src="/images/limited.png" alt="Limited"/></a><a class="collection-card" href="/Products"><img src="/images/studio.png" alt="Studio"/></a><a class="collection-card" href="/Products"><img src="/images/evenin.png" alt="Evening"/></a></div></section>
+<section class="color-section"><div class="section-title"><h2>SEZONUN RENKLERİ</h2></div><div class="color-grid"><div class="color-card"><img src="/images/visne.png" alt=""/><span>Vişne-Bordo</span></div><div class="color-card"><img src="/images/yagyesili.png" alt=""/><span>Yağ Yeşili</span></div><div class="color-card"><img src="/images/sari.png" alt=""/><span>Sarı</span></div><div class="color-card"><img src="/images/pastel.png" alt=""/><span>Pastel Tonlar</span></div><div class="color-card"><img src="/images/kirmizi.png" alt=""/><span>Kırmızı</span></div></div></section>
+<section class="guide-section"><div class="section-title"><h2>DRESS GUIDE</h2></div><div class="guide-grid"><a class="guide-card" href="/Products"><img src="/images/midi.png" alt="Midi"/></a><a class="guide-card" href="/Products"><img src="/images/black.png" alt="Black"/></a><a class="guide-card" href="/Products"><img src="/images/mini.png" alt="Mini"/></a><a class="guide-card" href="/Products"><img src="/images/satin.png" alt="Satin"/></a></div></section>
+@section Scripts { <script>const slider=document.getElementById('productSlider');document.querySelector('.right-btn')?.addEventListener('click',()=>slider.scrollBy({left:340,behavior:'smooth'}));document.querySelector('.left-btn')?.addEventListener('click',()=>slider.scrollBy({left:-340,behavior:'smooth'}));document.querySelectorAll('[data-favorite]').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();let a=JSON.parse(localStorage.getItem('favorites')||'[]');const p={id:b.dataset.id,name:b.dataset.name,price:b.dataset.price,image:b.dataset.image,hoverImage:b.dataset.hover};if(!a.some(x=>x.id===p.id))a.push(p);localStorage.setItem('favorites',JSON.stringify(a));b.textContent='♥';b.classList.add('active')}));document.querySelectorAll('[data-product-card]').forEach(c=>{c.addEventListener('click',e=>{if(!e.target.closest('button'))location.href=c.dataset.detailUrl});c.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&!e.target.closest('button')){e.preventDefault();location.href=c.dataset.detailUrl}})});</script> }

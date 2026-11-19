@@ -1,0 +1,32 @@
+@page "{id:int}"
+@model Velora.Core.Pages.Products.DetailsModel
+@{ ViewData["Title"] = Model.Product?.Name ?? "Ürün"; }
+@section Styles { <link rel="stylesheet" href="~/css/urundetay.css" /> }
+@if (Model.Product is not null)
+{
+    <section class="product-detail-page">
+        <div class="product-gallery">
+            <div class="small-images">@foreach (var image in Model.Images) { <img src="/@image" alt="@Model.Product.Name" onclick="changeImage(this)" /> }</div>
+            <div class="main-image"><img id="mainProductImage" src="/@Model.Product.Image" alt="@Model.Product.Name" /></div>
+        </div>
+        <div class="product-detail-info">
+            <span class="product-brand">VELORA STUDIO</span><h1>@Model.Product.Name</h1>
+            <p class="product-price">@Model.Product.Price.ToString("C0", new System.Globalization.CultureInfo("tr-TR"))</p>
+            <p class="product-description">@Model.Product.Description</p>
+            <p>Stok: @Model.Product.Stock</p>
+            <form method="post" asp-page-handler="Add" class="detail-buttons">
+                <input type="hidden" name="id" value="@Model.Product.Id" />
+                <input type="hidden" name="size" id="selectedSize" />
+                <div class="size-area"><h3>Beden Seç</h3><div class="sizes">@foreach (var size in new[] { "XS", "S", "M", "L", "XL" }) { <button type="button" data-size="@size">@size</button> }</div></div>
+                <button type="submit" class="add-cart" disabled="@(Model.Product.Stock < 1)">Sepete Ekle</button>
+                <button type="button" class="favorite" data-favorite data-id="@Model.Product.Id" data-name="@Model.Product.Name" data-price="@Model.Product.Price.ToString(System.Globalization.CultureInfo.InvariantCulture)" data-image="/@Model.Product.Image" data-hover="/@(Model.Product.HoverImage ?? Model.Product.Image)">♡ Favorilere Ekle</button>
+            </form>
+            <div class="product-extra"><div class="extra-box"><h4>Kargo</h4><p>Ücretsiz Teslimat</p></div><div class="extra-box"><h4>İade</h4><p>14 Gün Kolay İade</p></div><div class="extra-box"><h4>Kumaş</h4><p>Premium kalite</p></div></div>
+        </div>
+    </section>
+}
+@section Scripts { <script>
+function changeImage(img){document.getElementById('mainProductImage').src=img.src}
+document.querySelectorAll('.sizes button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.sizes button').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.getElementById('selectedSize').value=b.dataset.size}));document.querySelector('.detail-buttons')?.addEventListener('submit',e=>{if(!document.getElementById('selectedSize').value){e.preventDefault();alert('Lütfen beden seçiniz.')}});
+document.querySelector('[data-favorite]')?.addEventListener('click',e=>{const b=e.currentTarget;let a=JSON.parse(localStorage.getItem('favorites')||'[]');const p={id:b.dataset.id,name:b.dataset.name,price:b.dataset.price,image:b.dataset.image,hoverImage:b.dataset.hover};if(!a.some(x=>x.id===p.id))a.push(p);localStorage.setItem('favorites',JSON.stringify(a));b.textContent='♥ Favorilere Eklendi';});
+</script> }

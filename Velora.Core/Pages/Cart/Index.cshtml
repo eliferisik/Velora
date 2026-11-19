@@ -1,0 +1,19 @@
+@page
+@model Velora.Core.Pages.Cart.IndexModel
+@{ ViewData["Title"] = "Sepetim"; }
+@section Styles { <link rel="stylesheet" href="~/css/sepet.css" /> }
+<section class="cart-page">
+    <div class="cart-left"><h1>Sepetim</h1><div asp-validation-summary="ModelOnly" class="error"></div>
+        @if (Model.Items.Count == 0) { <div class="empty-cart"><h2>Sepetinizde ürün yok</h2><p>Velora koleksiyonunu keşfedin.</p><a href="/Products">Alışverişe Başla</a></div> }
+        else { foreach (var item in Model.Items) {
+            <article class="cart-item"><img src="/@item.Image" alt="@item.Name"/><div class="cart-info"><h3>@item.Name</h3><p>Beden: @item.Size · @item.UnitPrice.ToString("C0", Model.Culture)</p>
+                <div class="cart-actions"><form method="post" asp-page-handler="Quantity" class="quantity-form"><input type="hidden" name="productId" value="@item.ProductId"/><input type="hidden" name="size" value="@item.Size"/><label class="visually-hidden" for="quantity-@item.ProductId-@item.Size">Adet</label><input id="quantity-@item.ProductId-@item.Size" data-quantity type="number" name="quantity" min="0" max="10000" step="1" value="@item.Quantity" aria-label="@item.Name adet"/></form>
+                    <form method="post" asp-page-handler="Remove"><input type="hidden" name="productId" value="@item.ProductId"/><input type="hidden" name="size" value="@item.Size"/><button type="submit" class="trash-button" aria-label="@item.Name ürününü sepetten kaldır" title="Sepetten kaldır"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6m4-6v6M5 7l1 14h12l1-14M9 7V4h6v3"/></svg></button></form>
+                </div></div><strong>@((item.UnitPrice * item.Quantity).ToString("C0", Model.Culture))</strong></article>
+        } }
+    </div>
+    <aside class="cart-summary"><h2>Sipariş Özeti</h2><div class="summary-row"><span>Ara Toplam</span><span>@Model.Total.ToString("C0", Model.Culture)</span></div><div class="summary-row"><span>Kargo</span><span>Ücretsiz</span></div><div class="summary-row total"><span>Toplam</span><span>@Model.Total.ToString("C0", Model.Culture)</span></div>
+        @if (Model.Items.Count > 0) { <form method="post" asp-page-handler="Checkout"><button class="checkout-btn">Siparişi Tamamla</button></form> }
+    </aside>
+</section>
+@section Scripts { <script>document.querySelectorAll('[data-quantity]').forEach(input=>input.addEventListener('change',()=>input.form.requestSubmit()));</script> }
