@@ -16,8 +16,8 @@ Visual Studio 2022/18 ile `velorasite.slnx` dosyasını açıp `Velora.Core` pro
 CLI ile, NuGet paket geri yükleme tamamlandıktan sonra:
 
 ```powershell
-$env:AdminSeed__Email = "yonetici@ornek.com"
-$env:AdminSeed__Password = "GucluBirParola!2026"
+$env:AdminSeed__Email = Read-Host "Yönetici e-posta adresi"
+$env:AdminSeed__Password = Read-Host "Yönetici parolası"
 dotnet run --project .\Velora.Core\Velora.Core.csproj
 ```
 
@@ -36,5 +36,3 @@ Yönetici oluşturmak için ilk açılıştan önce `AdminSeed__Email` ve `Admin
 ## Migration
 
 Migration dosyaları `Velora.Core/Data/Migrations` altındadır. Yeni model değişikliklerinde EF Core migration ekleyin ve `dotnet ef database update` ile uygulayın.
-
-
